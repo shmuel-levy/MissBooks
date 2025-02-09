@@ -1,0 +1,27 @@
+.about {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.about h2 {
+    color: var(--clr1);
+    margin-bottom: 30px;
+}
+
+.about-content {
+    line-height: 1.6;
+}
+
+.about-content h3 {
+    color: var(--clr2);
+    margin-top: 25px;
+}
+
+.about-content ul {
+    padding-left: 20px;
+}
+
+.about-content li {
+    margin: 10px 0;
+}

@@ -1,0 +1,175 @@
+/* book-details.css */
+.book-view {
+    max-width: 1000px;
+    margin: 2rem auto;
+    background: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.book-header {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    padding: 2rem;
+    color: white;
+}
+
+.book-header h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+.book-header h2 {
+    margin: 0.5rem 0 0;
+    font-size: 1.2rem;
+    opacity: 0.9;
+    font-weight: 400;
+}
+
+.book-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.book-image-container {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.book-image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.book-image-container:hover img {
+    transform: scale(1.05);
+}
+
+.sale-banner {
+    position: absolute;
+    top: 20px;
+    right: -35px;
+    background: #e74c3c;
+    color: white;
+    padding: 8px 40px;
+    transform: rotate(45deg);
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.book-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.info-section label {
+    font-size: 0.9rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.info-section span {
+    font-size: 1.1rem;
+    color: #2c3e50;
+}
+
+.price {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.premium-price {
+    background: #fff3f3;
+    color: #e74c3c;
+}
+
+.bargain-price {
+    background: #f0fff0;
+    color: #27ae60;
+}
+
+.regular-price {
+    background: #f5f6fa;
+}
+
+.book-description {
+    margin-top: 1.5rem;
+    line-height: 1.6;
+}
+
+.book-actions {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.purchase-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.purchase-btn:hover {
+    background: #219a52;
+}
+
+.navigation-btns {
+    display: flex;
+    gap: 1rem;
+}
+
+.back-btn, .edit-btn {
+    flex: 1;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.back-btn {
+    background: #34495e;
+    color: white;
+}
+
+.edit-btn {
+    background: #3498db;
+    color: white;
+}
+
+.back-btn:hover, .edit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+    .book-content {
+        grid-template-columns: 1fr;
+    }
+
+    .book-image-container {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+}

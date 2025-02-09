@@ -1,0 +1,25 @@
+.app-header {
+    background-color: var(--clr1);
+    color: var(--clr1bg);
+    padding: 1em;
+}
+
+.app-header nav {
+    display: flex;
+    gap: 15px;
+}
+
+.app-header button {
+    background-color: var(--clr1bg);
+    color: var(--clr1);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.app-header button:hover {
+    background-color: var(--clr2bg);
+    color: var(--clr2);
+}
