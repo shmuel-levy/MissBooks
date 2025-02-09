@@ -1,12 +1,80 @@
 .book-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    list-style: none;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
 }
 
-.book-list li {
+.book-preview {
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    border-radius: 20px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.book-preview:hover {
+    transform: translateY(-5px);
+    box-shadow: 8px 8px 20px rgba(0,0,0,0.15);
+}
+
+.book-card-title {
+    font-size: 1.4rem;
+    color: #2d3436;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.book-card-thumbnail {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.book-card-details {
+    padding: 1rem 0;
+}
+
+.book-card-detail {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+    padding: 0.5rem;
+    background: rgba(255,255,255,0.7);
+    border-radius: 8px;
+}
+
+.book-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.book-actions button {
+    flex: 1;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+button.select-btn {
+    background: #00b894;
+    color: white;
+}
+
+button.delete-btn {
+    background: #ff7675;
+    color: white;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    filter: brightness(110%);
 }
