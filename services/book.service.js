@@ -11,7 +11,9 @@ export const bookService = {
     save,
     remove,
     getEmptyBook,
-    getDefaultFilter
+    getDefaultFilter,
+    addReview,
+    removeReview
 }
 
 function query(filterBy = {}) {
@@ -20,7 +22,6 @@ function query(filterBy = {}) {
             if (!books || !books.length) {
                 books = gBooks.map(book => ({
                     ...book,
-                    // Update thumbnail to use local images
                     thumbnail: `/BooksImages/${book.id.slice(0, 2)}.jpg`
                 }))
                 storageService.save(BOOK_KEY, books)
@@ -69,6 +70,23 @@ function getEmptyBook() {
             isOnSale: false
         }
     }
+}
+function addReview(bookId, review) {
+    return getById(bookId)
+        .then(book => {
+            if (!book.reviews) book.reviews = []
+            book.reviews.push(review)
+            return save(book)
+        })
+}
+
+function removeReview(bookId, reviewId) {
+    return getById(bookId)
+        .then(book => {
+            const idx = book.reviews.findIndex(review => review.id === reviewId)
+            book.reviews.splice(idx, 1)
+            return save(book)
+        })
 }
 
 function _createBooks() {

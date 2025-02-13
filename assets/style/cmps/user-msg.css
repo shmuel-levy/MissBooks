@@ -1,24 +1,47 @@
 .user-msg {
-    background-color: lightgray;
-    padding: .5em 1em;
     position: fixed;
-    bottom: 0;
-    right: 1em;
+    bottom: 20px;
+    right: 20px;
+    background-color: #2ecc71;
+    padding: 10px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 200px;
     color: white;
-    font-weight: bold;
-    border-radius: 2px;
+    font-size: 0.875rem;
+    animation: slideIn 0.3s forwards;
 }
 
 .user-msg.success {
-    background-color: var(--clr1);
+    background-color: #2ecc71;
 }
 
 .user-msg.error {
-    background-color: var(--clr2);
+    background-color: #f44336;
 }
 
+.user-msg button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0.7;
+}
 
-.user-msg button{
-    float: right;
-    margin: 1em;
+.user-msg button:hover {
+    opacity: 1;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }

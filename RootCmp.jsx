@@ -2,19 +2,22 @@ const { useState } = React
 const Router = ReactRouterDOM.HashRouter
 const { Routes, Route } = ReactRouterDOM
 
-import { AppHeader } from "./cmps/AppHeader.jsx"
-import { About } from "./pages/About.jsx"
-import { Home } from "./pages/Home.jsx"
-import { BookIndex } from "./pages/BookIndex.jsx"
-import { BookDetails } from "./pages/BookDetails.jsx"
+
+import { AppHeader } from './cmps/AppHeader.jsx'
+import { About } from './pages/AboutUs.jsx'
+import { Home } from './pages/Home.jsx'
+import { BookIndex } from './pages/BookIndex.jsx'
+import { BookDetails } from './pages/BookDetails.jsx'
+import { UserMsg } from './cmps/UserMsg.jsx'
 import { BookEdit } from "./pages/BookEdit.jsx"
+
 
 export function App() {
     return (
         <Router>
-            <section className="app">
-                <AppHeader />
-                <main className="main-layout">
+        <section className="app">
+            <AppHeader />
+            <main className="main-layout">
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/about" element={<About />} />
@@ -24,6 +27,8 @@ export function App() {
                         <Route path="/book/edit/:bookId" element={<BookEdit />} />
                     </Routes>
                 </main>
+                <UserMsg />
+
             </section>
         </Router>
     )

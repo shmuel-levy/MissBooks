@@ -15,8 +15,6 @@
 @import 'cmps/book-list.css';
 @import 'cmps/book-preview.css';
 @import 'cmps/book-details.css';
-
-
 /* Pages */
 @import 'pages/home.css';
 @import 'pages/about.css';
