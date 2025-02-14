@@ -1,5 +1,8 @@
 import { LongTxt } from "../cmps/LongTxt.jsx"
 import { bookService } from "../services/book.service.js"
+import { AddReview } from '../cmps/AddReview.jsx'
+
+
 const { useState, useEffect } = React
 
 export function BookDetails({ bookId, onBack }) {
@@ -35,6 +38,24 @@ export function BookDetails({ bookId, onBack }) {
        if (amount < 20) return 'bargain-price'
        return 'regular-price'
    }
+
+   function onAddReview(review) {
+    bookService.addReview(bookId, review)
+        .then(updatedBook => {
+            setBook(updatedBook)
+            showSuccessMsg('Review added successfully!')
+        })
+        .catch(() => showErrorMsg('Failed to add review'))
+}
+
+function onRemoveReview(reviewId) {
+    bookService.removeReview(bookId, reviewId)
+        .then(updatedBook => {
+            setBook(updatedBook)
+            showSuccessMsg('Review removed successfully!')
+        })
+        .catch(() => showErrorMsg('Failed to remove review'))
+}
 
    if (!book) return <div>Loading...</div>
 
@@ -102,6 +123,29 @@ export function BookDetails({ bookId, onBack }) {
                                ← Return
                            </button>
                        </div>
+                       <div className="book-reviews">
+                <AddReview onAddReview={onAddReview} />
+                
+                <div className="reviews-list">
+                    <h3>Reviews</h3>
+                    {book.reviews && book.reviews.length > 0 ? (
+                        <ul>
+                            {book.reviews.map(review => (
+                                <li key={review.id} className="review-item">
+                                    <p>By: {review.fullname}</p>
+                                    <p>Rating: {review.rating} stars</p>
+                                    <p>Read at: {new Date(review.readAt).toLocaleDateString()}</p>
+                                    <button onClick={() => onRemoveReview(review.id)}>
+                                        Delete Review
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>No reviews yet</p>
+                    )}
+                </div>
+            </div>
                    </div>
                </div>
            </div>
