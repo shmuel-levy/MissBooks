@@ -1,134 +1,240 @@
+/* Main Container */
 .book-view {
     max-width: 1200px;
     margin: 2rem auto;
     background: white;
-    border-radius: 20px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
+/* Header Styles */
 .book-header {
-    background: linear-gradient(135deg, #6c5ce7, #a8e6cf);
-    padding: 2rem;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    padding: 2.5rem 2rem;
     color: white;
-}
-
-.book-content {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 2rem;
-    padding: 2rem;
-}
-
-.book-image-container {
     position: relative;
 }
 
+.book-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.book-header h2 {
+    font-size: 1.25rem;
+    opacity: 0.9;
+}
+
+/* Content Layout */
+.book-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2.5rem;
+    padding: 2rem;
+    background: #f8fafc;
+}
+
+/* Book Image Container */
+.book-image-container {
+    position: relative;
+    background: white;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.book-image-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+}
+
+/* Sale Banner */
 .sale-banner {
     position: absolute;
     top: 1rem;
     right: 1rem;
-    background: #ff7675;
+    background: #ef4444;
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 20px;
     font-weight: 600;
+    font-size: 0.875rem;
     animation: pulse 2s infinite;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* Info Sections */
+.book-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .info-section {
-    background: #f8f9fa;
-    padding: 1rem;
-    border-radius: 12px;
-    margin-bottom: 1rem;
-}
-
-.info-section label {
-    color: #636e72;
-    font-size: 0.9rem;
-    display: block;
-    margin-bottom: 0.3rem;
-}
-
-.info-section span {
-    color: #2d3436;
-    font-size: 1.1rem;
-    font-weight: 500;
-}
-
-/* Reviews List */
-.reviews-list {
-    margin-top: 30px;
-}
-
-.review-item {
     background: white;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 1.25rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease;
 }
 
-.review-item .reviewer-name {
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-
-.review-item .review-text {
-    color: #666;
-    margin: 10px 0;
-}
-
-.review-item .review-meta {
-    font-size: 0.9em;
-    color: #888;
-}
-
-.delete-review-btn {
-    background: #ff6b6b;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9em;
-    opacity: 0.8;
-    transition: opacity 0.3s;
-}
-
-.delete-review-btn:hover {
-    opacity: 1;
-}
-
-/* Return Button */
-.return-btn {
-    background: #a8e6cf;
-    color: #2d3436;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.3s;
-    margin-bottom: 20px;
-}
-
-.return-btn:hover {
-    background: #88d7b9;
+.info-section:hover {
     transform: translateY(-2px);
 }
 
+.info-section label {
+    color: #64748b;
+    font-size: 0.875rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.info-section span {
+    color: #1e293b;
+    font-size: 1.125rem;
+    font-weight: 600;
+    display: block;
+}
+
+/* Price Styles */
+.price.premium-price span {
+    color: #dc2626;
+}
+
+.price.bargain-price span {
+    color: #16a34a;
+}
+
+/* Navigation */
+.book-navigation {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem;
+    background: white;
+    border-top: 1px solid #e2e8f0;
+}
+
+.nav-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.nav-btn.prev, .nav-btn.next {
+    background-color: #e0e7ff;
+    color: #4f46e5;
+}
+
+.nav-btn.back {
+    background-color: #6366f1;
+    color: white;
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nav-btn:active {
+    transform: translateY(0);
+}
+
+/* Reviews Section */
+.reviews-list {
+    padding: 2rem;
+    background: white;
+}
+
+.reviews-list h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #1e293b;
+}
+
+.review-item {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    transition: transform 0.2s ease;
+}
+
+.review-item:hover {
+    transform: translateY(-2px);
+}
+
+.reviewer-name {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.review-meta {
+    font-size: 0.875rem;
+    color: #64748b;
+    margin-bottom: 0.75rem;
+}
+
+.review-text {
+    color: #334155;
+    line-height: 1.6;
+}
+
+.delete-review-btn {
+    margin-top: 1rem;
+    background: #fee2e2;
+    color: #dc2626;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.delete-review-btn:hover {
+    background: #fecaca;
+    transform: translateY(-1px);
+}
+
+/* Animations */
 @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.05); }
     100% { transform: scale(1); }
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
     .book-content {
         grid-template-columns: 1fr;
     }
     
-    .book-filter form {
-        grid-template-columns: 1fr;
+    .book-image-container {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+    
+    .book-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .book-navigation {
+        flex-direction: column;
+        padding: 1.5rem;
+    }
+    
+    .nav-btn {
+        width: 100%;
     }
 }

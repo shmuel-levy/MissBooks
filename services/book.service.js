@@ -13,8 +13,12 @@ export const bookService = {
     getEmptyBook,
     getDefaultFilter,
     addReview,
-    removeReview
+    removeReview,
+    getNextBookId,
+    getPrevBookId
 }
+
+
 
 function query(filterBy = {}) {
     return storageService.query(BOOK_KEY)
@@ -71,6 +75,22 @@ function getEmptyBook() {
         }
     }
 }
+function getNextBookId(bookId) {
+    return storageService.query(BOOK_KEY)
+        .then(books => {
+            const idx = books.findIndex(book => book.id === bookId)
+            return idx < books.length - 1 ? books[idx + 1].id : books[0].id
+        })
+}
+
+function getPrevBookId(bookId) {
+    return storageService.query(BOOK_KEY)
+        .then(books => {
+            const idx = books.findIndex(book => book.id === bookId)
+            return idx > 0 ? books[idx - 1].id : books[books.length - 1].id
+        })
+}
+
 function addReview(bookId, review) {
     return getById(bookId)
         .then(book => {
