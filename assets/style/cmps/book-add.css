@@ -1,107 +1,127 @@
 .book-add {
-    padding: 20px;
     max-width: 800px;
-    margin: 0 auto;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
 }
 
-.search-container {
+.book-add h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.add-book-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Google Search Section */
+.google-search-section {
     margin-bottom: 20px;
 }
 
-.search-input {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    transition: all 0.3s ease;
+.google-search-section form {
+    margin-bottom: 15px;
 }
 
-.search-input:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
-}
-
-.loading {
-    text-align: center;
-    padding: 20px;
-    color: #666;
-}
-
-.book-search-results {
-    display: grid;
-    gap: 15px;
-    padding: 0;
-    list-style: none;
-}
-
-.book-search-item {
+.search-input-container {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: white;
+    gap: 10px;
+    margin-top: 5px;
 }
 
-.book-preview {
-    display: flex;
-    gap: 15px;
+.search-input-container input {
     flex: 1;
-}
-
-.book-preview img {
-    width: 60px;
-    height: 90px;
-    object-fit: cover;
+    padding: 8px;
+    border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-.book-info {
-    flex: 1;
-}
-
-.book-info h3 {
-    margin: 0 0 5px 0;
-    font-size: 1.1em;
-}
-
-.book-info .authors {
-    margin: 0 0 3px 0;
-    color: #666;
-    font-size: 0.9em;
-}
-
-.book-info .pages {
+.google-books-list {
+    list-style: none;
+    padding: 0;
     margin: 0;
-    color: #888;
-    font-size: 0.8em;
 }
 
-.add-btn {
-    background-color: #28a745;
+.google-book-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.google-book-item button {
+    padding: 2px 8px;
+    background-color: #4CAF50;
     color: white;
     border: none;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    font-size: 20px;
+    border-radius: 4px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 15px;
 }
 
-.add-btn:hover {
-    background-color: #218838;
-}
-
-.no-results {
-    text-align: center;
+/* Manual Form Section */
+.add-book-form {
+    background: white;
     padding: 20px;
-    color: #666;
-    font-style: italic;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-row {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-row label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-row input[type="text"],
+.form-row input[type="number"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.checkbox-row {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbox-row input {
+    margin: 0;
+}
+
+.form-row button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.form-row button:hover {
+    background-color: #0056b3;
+}
+
+.bold-txt {
+    font-weight: bold;
+}
+
+.form-row select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
 }

@@ -156,21 +156,32 @@ export function BookDetails() {
                 </button>
             </div>
 
-            <div className="reviews-list">
+            <section className="reviews-list">
                 <h3>Reviews</h3>
-                <AddReview onAddReview={onAddReview} />
+                
+                <div className="add-review-section">
+                    <AddReview onAddReview={onAddReview} />
+                </div>
                 
                 {book.reviews && book.reviews.length > 0 ? (
-                    <ul>
+                    <ul className="reviews-container">
                         {book.reviews.map((review, idx) => (
                             <li key={review.id || idx} className="review-item">
-                                <div className="reviewer-name">By: {review.fullname}</div>
-                                <div className="review-meta">
-                                    <span>{'⭐'.repeat(review.rating)}</span>
-                                    <span> • </span>
-                                    <span>{new Date(review.readAt).toLocaleDateString()}</span>
+                                <div className="review-header">
+                                    <div className="reviewer-name">By: {review.fullname}</div>
+                                    <div className="review-meta">
+                                        <span className="rating">{'⭐'.repeat(review.rating)}</span>
+                                        <span className="separator">•</span>
+                                        <span className="date">{new Date(review.readAt).toLocaleDateString()}</span>
+                                    </div>
                                 </div>
-                                {review.text && <p className="review-text">{review.text}</p>}
+                                
+                                {review.text && (
+                                    <div className="review-content">
+                                        <p className="review-text">{review.text}</p>
+                                    </div>
+                                )}
+                                
                                 <button 
                                     className="delete-review-btn"
                                     onClick={() => onRemoveReview(review.id)}
@@ -181,9 +192,9 @@ export function BookDetails() {
                         ))}
                     </ul>
                 ) : (
-                    <p>No reviews yet - Be the first to review!</p>
+                    <p className="no-reviews">No reviews yet - Be the first to review!</p>
                 )}
-            </div>
+            </section>
         </div>
     )
 }

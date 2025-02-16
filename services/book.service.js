@@ -118,22 +118,22 @@ function getGoogleBooks(searchTerm) {
     
     const gCache = utilService.loadFromStorage(CACHE_STORAGE_KEY) || {}
     if (gCache[searchTerm]) {
-        console.log('Fetching from cache:', searchTerm)
+        console.log('Getting from cache')
         return Promise.resolve(gCache[searchTerm])
     }
 
-    console.log('Fetching from API:', searchTerm)
-    const url = `https://www.googleapis.com/books/v1/volumes?printType=books&q=${searchTerm}`
+    console.log('Getting from network')
+    const url = `https://www.googleapis.com/books/v1/volumes?printType=books&fields=items(id,volumeInfo)&q=${searchTerm}`
     
     return axios.get(url)
         .then(res => {
-            const books = _formatGoogleBooks(res.data.items || [])
+            const books = res.data.items ? _formatGoogleBooks(res.data.items) : []
             gCache[searchTerm] = books
             utilService.saveToStorage(CACHE_STORAGE_KEY, gCache)
             return books
         })
         .catch(err => {
-            console.error('Failed to fetch Google books:', err)
+            console.error('Failed to get books from Google API:', err)
             throw err
         })
 }
@@ -153,21 +153,30 @@ function addGoogleBook(googleBook) {
 function _formatGoogleBook(googleBook) {
     const volumeInfo = googleBook.volumeInfo || {}
     const imageLinks = volumeInfo.imageLinks || {}
-    const thumbnail = imageLinks.thumbnail || '/assets/booksImages/default.jpg'
     
+    let thumbnail = imageLinks.thumbnail
+    if (thumbnail) {
+        thumbnail = thumbnail.replace('http://', 'https://')
+        thumbnail = thumbnail.replace('&edge=curl', '')
+    } else {
+        thumbnail = '/assets/booksImages/1.jpg'
+    }
+
+    const publishedDate = volumeInfo.publishedDate 
+        ? new Date(volumeInfo.publishedDate).getFullYear()
+        : new Date().getFullYear()
+
     return {
         id: googleBook.id || utilService.makeId(),
         title: volumeInfo.title || 'Untitled',
         subtitle: volumeInfo.subtitle || '',
         authors: volumeInfo.authors || ['Unknown Author'],
-        publishedDate: volumeInfo.publishedDate 
-            ? new Date(volumeInfo.publishedDate).getFullYear() 
-            : new Date().getFullYear(),
+        publishedDate,
         description: volumeInfo.description || 'No description available',
         pageCount: volumeInfo.pageCount || 100,
         categories: volumeInfo.categories || ['General'],
-        thumbnail: thumbnail,
-        language: volumeInfo.language || 'en',
+        thumbnail,
+        language: (volumeInfo.language || 'en').toUpperCase(),
         listPrice: {
             amount: utilService.getRandomIntInclusive(80, 500),
             currencyCode: "EUR",
@@ -177,9 +186,9 @@ function _formatGoogleBook(googleBook) {
     }
 }
 
-function _formatGoogleBooks(googleBooks) {
-    if (!googleBooks) return []
-    return googleBooks.map(book => _formatGoogleBook(book))
+function _formatGoogleBooks(items) {
+    if (!items || !Array.isArray(items)) return []
+    return items.map(item => _formatGoogleBook(item))
 }
 
 function _setNextPrevBookId(book) {
