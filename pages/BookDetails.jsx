@@ -1,8 +1,8 @@
 const { useState, useEffect } = React
 const { useParams, useNavigate } = ReactRouterDOM
 
+import { bookService } from '../services/book.service.js'
 import { LongTxt } from "../cmps/LongTxt.jsx"
-import { bookService } from "../services/book.service.js"
 import { AddReview } from "../cmps/AddReview.jsx"
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
 
@@ -16,51 +16,31 @@ export function BookDetails() {
     const bookId = params.bookId
 
     useEffect(() => {
-        if (!bookId) {
-            navigate('/book')
-            return
-        }
+        if (!bookId) return
         loadBook()
-        loadBookIds()
     }, [bookId])
 
     function loadBook() {
-        bookService.getById(bookId)
+        bookService.get(bookId)  
             .then(book => {
-                if (!book) {
-                    navigate('/book')
-                    return
-                }
                 setBook(book)
+                setNextBookId(book.nextBookId)
+                setPrevBookId(book.prevBookId)
             })
             .catch(err => {
+                console.error('Failed to load book:', err)
                 showErrorMsg('Failed to load book')
                 navigate('/book')
             })
     }
 
-    function loadBookIds() {
-        Promise.all([
-            bookService.getNextBookId(bookId),
-            bookService.getPrevBookId(bookId)
-        ]).then(([nextId, prevId]) => {
-            setNextBookId(nextId)
-            setPrevBookId(prevId)
-        }).catch(err => {
-        })
-    }
-
-
-
     function onNavigate(newBookId) {
-        if (!newBookId) return
         navigate(`/book/${newBookId}`)
     }
 
     function onBack() {
         navigate('/book')
     }
-
     function getReadingDifficulty(pageCount) {
         if (pageCount > 500) return "Epic Journey"
         if (pageCount > 200) return "Weekend Read"

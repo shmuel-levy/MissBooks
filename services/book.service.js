@@ -1,48 +1,43 @@
-import { storageService } from './async-storage.service.js'
 import { utilService } from './util.service.js'
-
+import { storageService } from './async-storage.service.js'
 
 const BOOK_KEY = 'bookDB'
+const CACHE_STORAGE_KEY = 'googleBooksCache'
+
 _createBooks()
 
 export const bookService = {
     query,
-    getById,
-    save,
+    get,
     remove,
+    save,
     getEmptyBook,
     getDefaultFilter,
-    addReview,
-    removeReview,
+    getGoogleBooks,
+    addGoogleBook,
     getNextBookId,
-    getPrevBookId
+    getPrevBookId,
+    addReview,
+    removeReview
 }
-
-
 
 function query(filterBy = {}) {
     return storageService.query(BOOK_KEY)
         .then(books => {
-            if (!books || !books.length) {
-                books = gBooks.map(book => ({
-                    ...book,
-                    thumbnail: `/BooksImages/${book.id.slice(0, 2)}.jpg`
-                }))
-                storageService.save(BOOK_KEY, books)
-            }
             if (filterBy.title) {
                 const regExp = new RegExp(filterBy.title, 'i')
-                books = books.filter(b => regExp.test(b.title))
+                books = books.filter(book => regExp.test(book.title))
             }
-            if (filterBy.maxPrice) {
-                books = books.filter(b => b.listPrice.amount <= filterBy.maxPrice)
+            if (filterBy.minPrice) {
+                books = books.filter(book => book.listPrice.amount >= filterBy.minPrice)
             }
             return books
         })
 }
 
-function getById(bookId) {
+function get(bookId) {
     return storageService.get(BOOK_KEY, bookId)
+        .then(book => _setNextPrevBookId(book))
 }
 
 function remove(bookId) {
@@ -57,24 +52,31 @@ function save(book) {
     }
 }
 
+function getEmptyBook(title = '', amount = '', description = '', pageCount = '', language = 'en', authors = '') {
+    return {
+        title,
+        authors: authors ? [authors] : [],
+        description,
+        pageCount,
+        thumbnail: '/assets/booksImages/15.jpg',
+        language,
+        listPrice: {
+            amount: amount || 0,
+            currencyCode: "EUR",
+            isOnSale: Math.random() > 0.7
+        },
+        reviews: []
+    }
+}
+
 function getDefaultFilter() {
     return {
         title: '',
+        minPrice: '',
         maxPrice: ''
     }
 }
 
-function getEmptyBook() {
-    return {
-        id: '',
-        title: '',
-        listPrice: {
-            amount: 0,
-            currencyCode: 'ILS',
-            isOnSale: false
-        }
-    }
-}
 function getNextBookId(bookId) {
     return storageService.query(BOOK_KEY)
         .then(books => {
@@ -92,50 +94,128 @@ function getPrevBookId(bookId) {
 }
 
 function addReview(bookId, review) {
-    return getById(bookId)
+    return get(bookId)
         .then(book => {
             if (!book.reviews) book.reviews = []
-            book.reviews.push(review)
+            review.id = utilService.makeId()
+            book.reviews.unshift(review)
             return save(book)
         })
 }
 
 function removeReview(bookId, reviewId) {
-    return getById(bookId)
+    return get(bookId)
         .then(book => {
             const idx = book.reviews.findIndex(review => review.id === reviewId)
+            if (idx === -1) throw new Error('Review not found')
             book.reviews.splice(idx, 1)
             return save(book)
         })
 }
 
+function getGoogleBooks(searchTerm) {
+    if (!searchTerm) return Promise.resolve([])
+    
+    const gCache = utilService.loadFromStorage(CACHE_STORAGE_KEY) || {}
+    if (gCache[searchTerm]) {
+        console.log('Fetching from cache:', searchTerm)
+        return Promise.resolve(gCache[searchTerm])
+    }
+
+    console.log('Fetching from API:', searchTerm)
+    const url = `https://www.googleapis.com/books/v1/volumes?printType=books&q=${searchTerm}`
+    
+    return axios.get(url)
+        .then(res => {
+            const books = _formatGoogleBooks(res.data.items || [])
+            gCache[searchTerm] = books
+            utilService.saveToStorage(CACHE_STORAGE_KEY, gCache)
+            return books
+        })
+        .catch(err => {
+            console.error('Failed to fetch Google books:', err)
+            throw err
+        })
+}
+
+function addGoogleBook(googleBook) {
+    const formattedBook = _formatGoogleBook(googleBook)
+    return storageService.query(BOOK_KEY)
+        .then(books => {
+            const existingBook = books.find(book => book.id === formattedBook.id)
+            if (existingBook) {
+                throw new Error('Book already exists in collection')
+            }
+            return storageService.post(BOOK_KEY, formattedBook)
+        })
+}
+
+function _formatGoogleBook(googleBook) {
+    const volumeInfo = googleBook.volumeInfo || {}
+    const imageLinks = volumeInfo.imageLinks || {}
+    const thumbnail = imageLinks.thumbnail || '/assets/booksImages/default.jpg'
+    
+    return {
+        id: googleBook.id || utilService.makeId(),
+        title: volumeInfo.title || 'Untitled',
+        subtitle: volumeInfo.subtitle || '',
+        authors: volumeInfo.authors || ['Unknown Author'],
+        publishedDate: volumeInfo.publishedDate 
+            ? new Date(volumeInfo.publishedDate).getFullYear() 
+            : new Date().getFullYear(),
+        description: volumeInfo.description || 'No description available',
+        pageCount: volumeInfo.pageCount || 100,
+        categories: volumeInfo.categories || ['General'],
+        thumbnail: thumbnail,
+        language: volumeInfo.language || 'en',
+        listPrice: {
+            amount: utilService.getRandomIntInclusive(80, 500),
+            currencyCode: "EUR",
+            isOnSale: Math.random() > 0.7
+        },
+        reviews: []
+    }
+}
+
+function _formatGoogleBooks(googleBooks) {
+    if (!googleBooks) return []
+    return googleBooks.map(book => _formatGoogleBook(book))
+}
+
+function _setNextPrevBookId(book) {
+    return storageService.query(BOOK_KEY)
+        .then((books) => {
+            const bookIdx = books.findIndex((currBook) => currBook.id === book.id)
+            const nextBook = books[bookIdx + 1] ? books[bookIdx + 1] : books[0]
+            const prevBook = books[bookIdx - 1] ? books[bookIdx - 1] : books[books.length - 1]
+            book.nextBookId = nextBook.id
+            book.prevBookId = prevBook.id
+            return book
+        })
+}
+
 function _createBooks() {
-    let books = localStorage.getItem(BOOK_KEY)
-    if (!books || !books.length) {
+    let books = utilService.loadFromStorage(BOOK_KEY)
+    if (books && books.length) return
 
-
-        books = [
-            {
-                "id": "OXeMG8wNskc",
-                "title": "metus hendrerit",
-                "subtitle": "mi est eros convallis auctor arcu dapibus himenaeos",
-                "authors": [
-                    "Barbara Cartland"
-                ],
-                "publishedDate": 1999,
-                "description": "placerat nisi sodales suscipit tellus tincidunt mauris elit sit luctus interdum ad dictum platea vehicula conubia fermentum habitasse congue suspendisse",
-                "pageCount": 713,
-                "categories": [
-                    "Computers",
-                    "Hack"
-                ],
-                "thumbnail": "http://coding-academy.org/books-photos/20.jpg",
-                "language": "en",
-                "listPrice": {
-                    "amount": 109,
-                    "currencyCode": "EUR",
-                    "isOnSale": false
-                }
+    books = [
+        {
+            "id": "OXeMG8wNskc",
+            "title": "metus hendrerit",
+            "subtitle": "mi est eros convallis auctor arcu dapibus himenaeos",
+            "authors": ["Barbara Cartland"],
+            "publishedDate": 1999,
+            "description": "placerat nisi sodales suscipit tellus tincidunt mauris elit sit luctus interdum ad dictum platea vehicula conubia fermentum habitasse congue suspendisse",
+            "pageCount": 713,
+            "categories": ["Computers", "Hack"],
+            "thumbnail": "/assets/booksImages/20.jpg",
+            "language": "en",
+            "listPrice": {
+                "amount": 109,
+                "currencyCode": "EUR",
+                "isOnSale": false
+            },
+            "reviews": []
             },
             {
                 "id": "JYOJa2NpSCq",
@@ -556,9 +636,5 @@ function _createBooks() {
                 }
             }
         ]
-        localStorage.setItem(BOOK_KEY, JSON.stringify(books))
-    } else {
-        books = JSON.parse(books)
-    }
-    return books
+        utilService.saveToStorage(BOOK_KEY, books)
 }
