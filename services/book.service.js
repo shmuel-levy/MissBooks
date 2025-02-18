@@ -20,7 +20,8 @@ export const bookService = {
     getPrevBookId,
     addReview,
     removeReview,
-    getCategoryStats
+    getCategoryStats,
+    getBookStats
 }
 
 function query(filterBy = {}) {
@@ -82,6 +83,18 @@ function getCategoryStats() {
             
             return data
         })
+}
+
+function getBookStats(books) {
+    if (!books || !books.length) return null
+    
+    return {
+        totalBooks: books.length,
+        avgPrice: Math.round(books.reduce((acc, book) => acc + book.listPrice.amount, 0) / books.length),
+        onSaleCount: books.filter(book => book.listPrice.isOnSale).length,
+        avgPages: Math.round(books.reduce((acc, book) => acc + book.pageCount, 0) / books.length),
+        languages: [...new Set(books.map(book => book.language))].length
+    }
 }
 
 function getEmptyBook(title = '', amount = '', description = '', pageCount = '', language = 'en', authors = '') {
