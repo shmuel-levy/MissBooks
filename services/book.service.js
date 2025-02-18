@@ -13,6 +13,7 @@ export const bookService = {
     save,
     getEmptyBook,
     getDefaultFilter,
+    getFilterFromSearchParams,
     getGoogleBooks,
     addGoogleBook,
     getNextBookId,
@@ -28,8 +29,9 @@ function query(filterBy = {}) {
                 const regExp = new RegExp(filterBy.title, 'i')
                 books = books.filter(book => regExp.test(book.title))
             }
-            if (filterBy.minPrice) {
-                books = books.filter(book => book.listPrice.amount >= filterBy.minPrice)
+            if (filterBy.maxPrice) {
+                const maxPrice = +filterBy.maxPrice 
+                books = books.filter(book => book.listPrice.amount <= maxPrice)
             }
             return books
         })
@@ -72,9 +74,19 @@ function getEmptyBook(title = '', amount = '', description = '', pageCount = '',
 function getDefaultFilter() {
     return {
         title: '',
-        minPrice: '',
+        // minPrice: '',
         maxPrice: ''
     }
+}
+
+function getFilterFromSearchParams(searchParams) {
+    const defaultFilter = getDefaultFilter()
+    const filterBy = {}
+    
+    for (const field in defaultFilter) {
+        filterBy[field] = searchParams.get(field) || defaultFilter[field]
+    }
+    return filterBy
 }
 
 function getNextBookId(bookId) {
