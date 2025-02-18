@@ -19,7 +19,8 @@ export const bookService = {
     getNextBookId,
     getPrevBookId,
     addReview,
-    removeReview
+    removeReview,
+    getCategoryStats
 }
 
 function query(filterBy = {}) {
@@ -52,6 +53,35 @@ function save(book) {
     } else {
         return storageService.post(BOOK_KEY, book)
     }
+}
+
+
+function getBookCountByCategoryMap(books) {
+    const categoryCountMap = {}
+    
+    books.forEach(book => {
+        book.categories.forEach(category => {
+            if (!categoryCountMap[category]) categoryCountMap[category] = 0
+            categoryCountMap[category]++
+        })
+    })
+    
+    return categoryCountMap
+}
+
+function getCategoryStats() {
+    return storageService.query(BOOK_KEY)
+        .then(books => {
+            const categoryCountMap = getBookCountByCategoryMap(books)
+            const totalBooks = books.length
+            
+            const data = Object.keys(categoryCountMap).map(category => ({
+                name: category,
+                value: Math.round((categoryCountMap[category] / totalBooks) * 100)
+            }))
+            
+            return data
+        })
 }
 
 function getEmptyBook(title = '', amount = '', description = '', pageCount = '', language = 'en', authors = '') {
