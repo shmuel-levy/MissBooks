@@ -1,27 +1,111 @@
 .about {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    font-family: 'Poppins', sans-serif;
 }
 
-.about h2 {
-    color: var(--clr1);
-    margin-bottom: 30px;
+.about h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 2rem;
+    font-weight: 600;
 }
 
-.about-content {
-    line-height: 1.6;
+.about-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
 }
 
-.about-content h3 {
-    color: var(--clr2);
-    margin-top: 25px;
+.about-nav a {
+    padding: 0.5rem 1.5rem;
+    text-decoration: none;
+    color: #666;
+    border-radius: 4px;
+    transition: all 0.3s ease;
 }
 
-.about-content ul {
-    padding-left: 20px;
+.about-nav a:hover {
+    background: #e9ecef;
 }
 
-.about-content li {
-    margin: 10px 0;
+.about-nav a.active {
+    background: #007bff;
+    color: white;
+}
+
+/* Team Section */
+.about-team, .about-goal {
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.team-members, .goals-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.team-member, .goal-item {
+    text-align: center;
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.team-member:hover, .goal-item:hover {
+    transform: translateY(-5px);
+}
+
+.team-member i, .goal-item i {
+    font-size: 2.5rem;
+    color: #007bff;
+    margin-bottom: 1rem;
+}
+
+.team-member h3, .goal-item h3 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.team-member p, .goal-item p {
+    color: #666;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+h2 i {
+    margin-right: 0.5rem;
+    color: #007bff;
+}
+
+.animate__animated {
+    animation-duration: 0.8s;
+}
+
+@media (max-width: 768px) {
+    .about {
+        padding: 1rem;
+    }
+
+    .team-members, .goals-list {
+        grid-template-columns: 1fr;
+    }
+
+    .about-nav {
+        flex-direction: column;
+        text-align: center;
+    }
 }

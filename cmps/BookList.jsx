@@ -5,7 +5,7 @@ export function BookList({ books, onRemoveBook }) {
     return (
         <ul className="book-list clean-list">
             {books.map((book, idx) => (
-                <li key={book.id}>
+                <li key={book.id} className="animate__animated animate__fadeIn">
                     <BookPreview 
                         book={book}
                         idx={idx + 1}

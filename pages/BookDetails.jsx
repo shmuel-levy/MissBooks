@@ -84,7 +84,7 @@ export function BookDetails() {
     if (!book) return <div>Loading...</div>
 
     return (
-        <div className="book-view">
+        <div className="book-view animate__animated animate__fadeIn">
             <header className="book-header">
                 <h1>{book.title}</h1>
                 {book.subtitle && <h2>{book.subtitle}</h2>}
